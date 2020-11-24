@@ -438,7 +438,7 @@ plt.show()
 ```
 
 
-![png](output_30_0.png)
+![png](figures/output_30_0.png)
 
 
 Since we have already filled in many null values, none of the columns have a very large proportion of missing values. However, the 'LotFrontage' column still has some missing values that we can try to fill in. In this particular case, we can assume that the LotFrontage, or front yard space, of a particular home is generally similar to that of the surrounding homes, so we can impute the missing values using the median of the homes in the same neighborhood.
@@ -467,7 +467,7 @@ plt.show()
 ```
 
 
-![png](output_34_0.png)
+![png](figures/output_34_0.png)
 
 
 Now we only have missing values in the 'Electrical' column, but this represents a very small proportion of the overall values. We will impute these values in the next step, when we use a Scikit-learn pipeline to transform our data.
@@ -663,7 +663,7 @@ plt.show()
 ```
 
 
-![png](output_39_0.png)
+![png](figures/output_39_0.png)
 
 
 Here, the bottom row and the right column of the heatmap tell us how each of the features is correlated with the SalePrice output. We can see, for example, that LotArea is highly correlated with sale price, and this makes intuitive sense. However, as we move forward, we must consider that our features may have nonlinear relationships with the output variable (or one another), which this heatmap will not show. 
@@ -680,7 +680,7 @@ plt.show()
 ```
 
 
-![png](output_42_0.png)
+![png](figures/output_42_0.png)
 
 
 Interestingly, we can see that only 2 of the input variables have correlations of at least 0.7 with the output variable. We also see that there are a few input features that are highly correlated. 
@@ -703,7 +703,7 @@ plt.show()
 ```
 
 
-![png](output_46_0.png)
+![png](figures/output_46_0.png)
 
 
 We can see that the sale price has a bit of right skew and the data does not form a normal distribution. With this in mind, we will log transform the sale price values. Conveniently, Kaggle's scoring for this competition also uses a log-transformed output variable, so this will help us to estimate our model prediction scores as well. 
@@ -735,7 +735,7 @@ plt.show()
 ```
 
 
-![png](output_49_0.png)
+![png](figures/output_49_0.png)
 
 
 As we can see, the output now resembles a normal distribution, which will help our models to predict outcomes. 
@@ -1242,7 +1242,7 @@ plt.show()
 ```
 
 
-![png](output_93_0.png)
+![png](figures/output_93_0.png)
 
 
 Interestingly, this graph shows us that the best error reduces in large steps, rather than with each iteration. This is because of how hyperopt works--rather than minimizing the objective function at every iteration (i.e. fitting the model and determining the error), hyperopt will use expected improvement to drive iterations. This is also the same reason why the minimum error presented by hyperopt was different from our actual CV result.
