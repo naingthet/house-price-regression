@@ -116,1064 +116,17 @@ The data for this project is provided by Kaggle and available through the Kaggle
 
 ```python
 # Data description
-descr = urllib.request.urlopen('https://raw.githubusercontent.com/naingthet/house-price-regression/main/data/data_description.txt')
-for line in descr:
-  decoded_line = line.decode("utf-8")
-  print(decoded_line)
+descr = urllib.request.urlopen('https://raw.githubusercontent.com/naingthet/house-price-regression/gh-pages/data/data_description.txt')
+# Uncomment the code below to print the data description
+# for line in descr:
+#   decoded_line = line.decode("utf-8")
+#   print(decoded_line)
 
 # Training data
-train = pd.read_csv('https://raw.githubusercontent.com/naingthet/house-price-regression/main/data/train.csv')
+train = pd.read_csv('https://raw.githubusercontent.com/naingthet/house-price-regression/gh-pages/data/train.csv')
 # Test data
-test = pd.read_csv('https://raw.githubusercontent.com/naingthet/house-price-regression/main/data/test.csv')
+test = pd.read_csv('https://raw.githubusercontent.com/naingthet/house-price-regression/gh-pages/data/test.csv')
 ```
-
-    MSSubClass: Identifies the type of dwelling involved in the sale.	
-    
-    
-    
-            20	1-STORY 1946 & NEWER ALL STYLES
-    
-            30	1-STORY 1945 & OLDER
-    
-            40	1-STORY W/FINISHED ATTIC ALL AGES
-    
-            45	1-1/2 STORY - UNFINISHED ALL AGES
-    
-            50	1-1/2 STORY FINISHED ALL AGES
-    
-            60	2-STORY 1946 & NEWER
-    
-            70	2-STORY 1945 & OLDER
-    
-            75	2-1/2 STORY ALL AGES
-    
-            80	SPLIT OR MULTI-LEVEL
-    
-            85	SPLIT FOYER
-    
-            90	DUPLEX - ALL STYLES AND AGES
-    
-           120	1-STORY PUD (Planned Unit Development) - 1946 & NEWER
-    
-           150	1-1/2 STORY PUD - ALL AGES
-    
-           160	2-STORY PUD - 1946 & NEWER
-    
-           180	PUD - MULTILEVEL - INCL SPLIT LEV/FOYER
-    
-           190	2 FAMILY CONVERSION - ALL STYLES AND AGES
-    
-    
-    
-    MSZoning: Identifies the general zoning classification of the sale.
-    
-    		
-    
-           A	Agriculture
-    
-           C	Commercial
-    
-           FV	Floating Village Residential
-    
-           I	Industrial
-    
-           RH	Residential High Density
-    
-           RL	Residential Low Density
-    
-           RP	Residential Low Density Park 
-    
-           RM	Residential Medium Density
-    
-    	
-    
-    LotFrontage: Linear feet of street connected to property
-    
-    
-    
-    LotArea: Lot size in square feet
-    
-    
-    
-    Street: Type of road access to property
-    
-    
-    
-           Grvl	Gravel	
-    
-           Pave	Paved
-    
-           	
-    
-    Alley: Type of alley access to property
-    
-    
-    
-           Grvl	Gravel
-    
-           Pave	Paved
-    
-           NA 	No alley access
-    
-    		
-    
-    LotShape: General shape of property
-    
-    
-    
-           Reg	Regular	
-    
-           IR1	Slightly irregular
-    
-           IR2	Moderately Irregular
-    
-           IR3	Irregular
-    
-           
-    
-    LandContour: Flatness of the property
-    
-    
-    
-           Lvl	Near Flat/Level	
-    
-           Bnk	Banked - Quick and significant rise from street grade to building
-    
-           HLS	Hillside - Significant slope from side to side
-    
-           Low	Depression
-    
-    		
-    
-    Utilities: Type of utilities available
-    
-    		
-    
-           AllPub	All public Utilities (E,G,W,& S)	
-    
-           NoSewr	Electricity, Gas, and Water (Septic Tank)
-    
-           NoSeWa	Electricity and Gas Only
-    
-           ELO	Electricity only	
-    
-    	
-    
-    LotConfig: Lot configuration
-    
-    
-    
-           Inside	Inside lot
-    
-           Corner	Corner lot
-    
-           CulDSac	Cul-de-sac
-    
-           FR2	Frontage on 2 sides of property
-    
-           FR3	Frontage on 3 sides of property
-    
-    	
-    
-    LandSlope: Slope of property
-    
-    		
-    
-           Gtl	Gentle slope
-    
-           Mod	Moderate Slope	
-    
-           Sev	Severe Slope
-    
-    	
-    
-    Neighborhood: Physical locations within Ames city limits
-    
-    
-    
-           Blmngtn	Bloomington Heights
-    
-           Blueste	Bluestem
-    
-           BrDale	Briardale
-    
-           BrkSide	Brookside
-    
-           ClearCr	Clear Creek
-    
-           CollgCr	College Creek
-    
-           Crawfor	Crawford
-    
-           Edwards	Edwards
-    
-           Gilbert	Gilbert
-    
-           IDOTRR	Iowa DOT and Rail Road
-    
-           MeadowV	Meadow Village
-    
-           Mitchel	Mitchell
-    
-           Names	North Ames
-    
-           NoRidge	Northridge
-    
-           NPkVill	Northpark Villa
-    
-           NridgHt	Northridge Heights
-    
-           NWAmes	Northwest Ames
-    
-           OldTown	Old Town
-    
-           SWISU	South & West of Iowa State University
-    
-           Sawyer	Sawyer
-    
-           SawyerW	Sawyer West
-    
-           Somerst	Somerset
-    
-           StoneBr	Stone Brook
-    
-           Timber	Timberland
-    
-           Veenker	Veenker
-    
-    			
-    
-    Condition1: Proximity to various conditions
-    
-    	
-    
-           Artery	Adjacent to arterial street
-    
-           Feedr	Adjacent to feeder street	
-    
-           Norm	Normal	
-    
-           RRNn	Within 200' of North-South Railroad
-    
-           RRAn	Adjacent to North-South Railroad
-    
-           PosN	Near positive off-site feature--park, greenbelt, etc.
-    
-           PosA	Adjacent to postive off-site feature
-    
-           RRNe	Within 200' of East-West Railroad
-    
-           RRAe	Adjacent to East-West Railroad
-    
-    	
-    
-    Condition2: Proximity to various conditions (if more than one is present)
-    
-    		
-    
-           Artery	Adjacent to arterial street
-    
-           Feedr	Adjacent to feeder street	
-    
-           Norm	Normal	
-    
-           RRNn	Within 200' of North-South Railroad
-    
-           RRAn	Adjacent to North-South Railroad
-    
-           PosN	Near positive off-site feature--park, greenbelt, etc.
-    
-           PosA	Adjacent to postive off-site feature
-    
-           RRNe	Within 200' of East-West Railroad
-    
-           RRAe	Adjacent to East-West Railroad
-    
-    	
-    
-    BldgType: Type of dwelling
-    
-    		
-    
-           1Fam	Single-family Detached	
-    
-           2FmCon	Two-family Conversion; originally built as one-family dwelling
-    
-           Duplx	Duplex
-    
-           TwnhsE	Townhouse End Unit
-    
-           TwnhsI	Townhouse Inside Unit
-    
-    	
-    
-    HouseStyle: Style of dwelling
-    
-    	
-    
-           1Story	One story
-    
-           1.5Fin	One and one-half story: 2nd level finished
-    
-           1.5Unf	One and one-half story: 2nd level unfinished
-    
-           2Story	Two story
-    
-           2.5Fin	Two and one-half story: 2nd level finished
-    
-           2.5Unf	Two and one-half story: 2nd level unfinished
-    
-           SFoyer	Split Foyer
-    
-           SLvl	Split Level
-    
-    	
-    
-    OverallQual: Rates the overall material and finish of the house
-    
-    
-    
-           10	Very Excellent
-    
-           9	Excellent
-    
-           8	Very Good
-    
-           7	Good
-    
-           6	Above Average
-    
-           5	Average
-    
-           4	Below Average
-    
-           3	Fair
-    
-           2	Poor
-    
-           1	Very Poor
-    
-    	
-    
-    OverallCond: Rates the overall condition of the house
-    
-    
-    
-           10	Very Excellent
-    
-           9	Excellent
-    
-           8	Very Good
-    
-           7	Good
-    
-           6	Above Average	
-    
-           5	Average
-    
-           4	Below Average	
-    
-           3	Fair
-    
-           2	Poor
-    
-           1	Very Poor
-    
-    		
-    
-    YearBuilt: Original construction date
-    
-    
-    
-    YearRemodAdd: Remodel date (same as construction date if no remodeling or additions)
-    
-    
-    
-    RoofStyle: Type of roof
-    
-    
-    
-           Flat	Flat
-    
-           Gable	Gable
-    
-           Gambrel	Gabrel (Barn)
-    
-           Hip	Hip
-    
-           Mansard	Mansard
-    
-           Shed	Shed
-    
-    		
-    
-    RoofMatl: Roof material
-    
-    
-    
-           ClyTile	Clay or Tile
-    
-           CompShg	Standard (Composite) Shingle
-    
-           Membran	Membrane
-    
-           Metal	Metal
-    
-           Roll	Roll
-    
-           Tar&Grv	Gravel & Tar
-    
-           WdShake	Wood Shakes
-    
-           WdShngl	Wood Shingles
-    
-    		
-    
-    Exterior1st: Exterior covering on house
-    
-    
-    
-           AsbShng	Asbestos Shingles
-    
-           AsphShn	Asphalt Shingles
-    
-           BrkComm	Brick Common
-    
-           BrkFace	Brick Face
-    
-           CBlock	Cinder Block
-    
-           CemntBd	Cement Board
-    
-           HdBoard	Hard Board
-    
-           ImStucc	Imitation Stucco
-    
-           MetalSd	Metal Siding
-    
-           Other	Other
-    
-           Plywood	Plywood
-    
-           PreCast	PreCast	
-    
-           Stone	Stone
-    
-           Stucco	Stucco
-    
-           VinylSd	Vinyl Siding
-    
-           Wd Sdng	Wood Siding
-    
-           WdShing	Wood Shingles
-    
-    	
-    
-    Exterior2nd: Exterior covering on house (if more than one material)
-    
-    
-    
-           AsbShng	Asbestos Shingles
-    
-           AsphShn	Asphalt Shingles
-    
-           BrkComm	Brick Common
-    
-           BrkFace	Brick Face
-    
-           CBlock	Cinder Block
-    
-           CemntBd	Cement Board
-    
-           HdBoard	Hard Board
-    
-           ImStucc	Imitation Stucco
-    
-           MetalSd	Metal Siding
-    
-           Other	Other
-    
-           Plywood	Plywood
-    
-           PreCast	PreCast
-    
-           Stone	Stone
-    
-           Stucco	Stucco
-    
-           VinylSd	Vinyl Siding
-    
-           Wd Sdng	Wood Siding
-    
-           WdShing	Wood Shingles
-    
-    	
-    
-    MasVnrType: Masonry veneer type
-    
-    
-    
-           BrkCmn	Brick Common
-    
-           BrkFace	Brick Face
-    
-           CBlock	Cinder Block
-    
-           None	None
-    
-           Stone	Stone
-    
-    	
-    
-    MasVnrArea: Masonry veneer area in square feet
-    
-    
-    
-    ExterQual: Evaluates the quality of the material on the exterior 
-    
-    		
-    
-           Ex	Excellent
-    
-           Gd	Good
-    
-           TA	Average/Typical
-    
-           Fa	Fair
-    
-           Po	Poor
-    
-    		
-    
-    ExterCond: Evaluates the present condition of the material on the exterior
-    
-    		
-    
-           Ex	Excellent
-    
-           Gd	Good
-    
-           TA	Average/Typical
-    
-           Fa	Fair
-    
-           Po	Poor
-    
-    		
-    
-    Foundation: Type of foundation
-    
-    		
-    
-           BrkTil	Brick & Tile
-    
-           CBlock	Cinder Block
-    
-           PConc	Poured Contrete	
-    
-           Slab	Slab
-    
-           Stone	Stone
-    
-           Wood	Wood
-    
-    		
-    
-    BsmtQual: Evaluates the height of the basement
-    
-    
-    
-           Ex	Excellent (100+ inches)	
-    
-           Gd	Good (90-99 inches)
-    
-           TA	Typical (80-89 inches)
-    
-           Fa	Fair (70-79 inches)
-    
-           Po	Poor (<70 inches
-    
-           NA	No Basement
-    
-    		
-    
-    BsmtCond: Evaluates the general condition of the basement
-    
-    
-    
-           Ex	Excellent
-    
-           Gd	Good
-    
-           TA	Typical - slight dampness allowed
-    
-           Fa	Fair - dampness or some cracking or settling
-    
-           Po	Poor - Severe cracking, settling, or wetness
-    
-           NA	No Basement
-    
-    	
-    
-    BsmtExposure: Refers to walkout or garden level walls
-    
-    
-    
-           Gd	Good Exposure
-    
-           Av	Average Exposure (split levels or foyers typically score average or above)	
-    
-           Mn	Mimimum Exposure
-    
-           No	No Exposure
-    
-           NA	No Basement
-    
-    	
-    
-    BsmtFinType1: Rating of basement finished area
-    
-    
-    
-           GLQ	Good Living Quarters
-    
-           ALQ	Average Living Quarters
-    
-           BLQ	Below Average Living Quarters	
-    
-           Rec	Average Rec Room
-    
-           LwQ	Low Quality
-    
-           Unf	Unfinshed
-    
-           NA	No Basement
-    
-    		
-    
-    BsmtFinSF1: Type 1 finished square feet
-    
-    
-    
-    BsmtFinType2: Rating of basement finished area (if multiple types)
-    
-    
-    
-           GLQ	Good Living Quarters
-    
-           ALQ	Average Living Quarters
-    
-           BLQ	Below Average Living Quarters	
-    
-           Rec	Average Rec Room
-    
-           LwQ	Low Quality
-    
-           Unf	Unfinshed
-    
-           NA	No Basement
-    
-    
-    
-    BsmtFinSF2: Type 2 finished square feet
-    
-    
-    
-    BsmtUnfSF: Unfinished square feet of basement area
-    
-    
-    
-    TotalBsmtSF: Total square feet of basement area
-    
-    
-    
-    Heating: Type of heating
-    
-    		
-    
-           Floor	Floor Furnace
-    
-           GasA	Gas forced warm air furnace
-    
-           GasW	Gas hot water or steam heat
-    
-           Grav	Gravity furnace	
-    
-           OthW	Hot water or steam heat other than gas
-    
-           Wall	Wall furnace
-    
-    		
-    
-    HeatingQC: Heating quality and condition
-    
-    
-    
-           Ex	Excellent
-    
-           Gd	Good
-    
-           TA	Average/Typical
-    
-           Fa	Fair
-    
-           Po	Poor
-    
-    		
-    
-    CentralAir: Central air conditioning
-    
-    
-    
-           N	No
-    
-           Y	Yes
-    
-    		
-    
-    Electrical: Electrical system
-    
-    
-    
-           SBrkr	Standard Circuit Breakers & Romex
-    
-           FuseA	Fuse Box over 60 AMP and all Romex wiring (Average)	
-    
-           FuseF	60 AMP Fuse Box and mostly Romex wiring (Fair)
-    
-           FuseP	60 AMP Fuse Box and mostly knob & tube wiring (poor)
-    
-           Mix	Mixed
-    
-    		
-    
-    1stFlrSF: First Floor square feet
-    
-     
-    
-    2ndFlrSF: Second floor square feet
-    
-    
-    
-    LowQualFinSF: Low quality finished square feet (all floors)
-    
-    
-    
-    GrLivArea: Above grade (ground) living area square feet
-    
-    
-    
-    BsmtFullBath: Basement full bathrooms
-    
-    
-    
-    BsmtHalfBath: Basement half bathrooms
-    
-    
-    
-    FullBath: Full bathrooms above grade
-    
-    
-    
-    HalfBath: Half baths above grade
-    
-    
-    
-    Bedroom: Bedrooms above grade (does NOT include basement bedrooms)
-    
-    
-    
-    Kitchen: Kitchens above grade
-    
-    
-    
-    KitchenQual: Kitchen quality
-    
-    
-    
-           Ex	Excellent
-    
-           Gd	Good
-    
-           TA	Typical/Average
-    
-           Fa	Fair
-    
-           Po	Poor
-    
-           	
-    
-    TotRmsAbvGrd: Total rooms above grade (does not include bathrooms)
-    
-    
-    
-    Functional: Home functionality (Assume typical unless deductions are warranted)
-    
-    
-    
-           Typ	Typical Functionality
-    
-           Min1	Minor Deductions 1
-    
-           Min2	Minor Deductions 2
-    
-           Mod	Moderate Deductions
-    
-           Maj1	Major Deductions 1
-    
-           Maj2	Major Deductions 2
-    
-           Sev	Severely Damaged
-    
-           Sal	Salvage only
-    
-    		
-    
-    Fireplaces: Number of fireplaces
-    
-    
-    
-    FireplaceQu: Fireplace quality
-    
-    
-    
-           Ex	Excellent - Exceptional Masonry Fireplace
-    
-           Gd	Good - Masonry Fireplace in main level
-    
-           TA	Average - Prefabricated Fireplace in main living area or Masonry Fireplace in basement
-    
-           Fa	Fair - Prefabricated Fireplace in basement
-    
-           Po	Poor - Ben Franklin Stove
-    
-           NA	No Fireplace
-    
-    		
-    
-    GarageType: Garage location
-    
-    		
-    
-           2Types	More than one type of garage
-    
-           Attchd	Attached to home
-    
-           Basment	Basement Garage
-    
-           BuiltIn	Built-In (Garage part of house - typically has room above garage)
-    
-           CarPort	Car Port
-    
-           Detchd	Detached from home
-    
-           NA	No Garage
-    
-    		
-    
-    GarageYrBlt: Year garage was built
-    
-    		
-    
-    GarageFinish: Interior finish of the garage
-    
-    
-    
-           Fin	Finished
-    
-           RFn	Rough Finished	
-    
-           Unf	Unfinished
-    
-           NA	No Garage
-    
-    		
-    
-    GarageCars: Size of garage in car capacity
-    
-    
-    
-    GarageArea: Size of garage in square feet
-    
-    
-    
-    GarageQual: Garage quality
-    
-    
-    
-           Ex	Excellent
-    
-           Gd	Good
-    
-           TA	Typical/Average
-    
-           Fa	Fair
-    
-           Po	Poor
-    
-           NA	No Garage
-    
-    		
-    
-    GarageCond: Garage condition
-    
-    
-    
-           Ex	Excellent
-    
-           Gd	Good
-    
-           TA	Typical/Average
-    
-           Fa	Fair
-    
-           Po	Poor
-    
-           NA	No Garage
-    
-    		
-    
-    PavedDrive: Paved driveway
-    
-    
-    
-           Y	Paved 
-    
-           P	Partial Pavement
-    
-           N	Dirt/Gravel
-    
-    		
-    
-    WoodDeckSF: Wood deck area in square feet
-    
-    
-    
-    OpenPorchSF: Open porch area in square feet
-    
-    
-    
-    EnclosedPorch: Enclosed porch area in square feet
-    
-    
-    
-    3SsnPorch: Three season porch area in square feet
-    
-    
-    
-    ScreenPorch: Screen porch area in square feet
-    
-    
-    
-    PoolArea: Pool area in square feet
-    
-    
-    
-    PoolQC: Pool quality
-    
-    		
-    
-           Ex	Excellent
-    
-           Gd	Good
-    
-           TA	Average/Typical
-    
-           Fa	Fair
-    
-           NA	No Pool
-    
-    		
-    
-    Fence: Fence quality
-    
-    		
-    
-           GdPrv	Good Privacy
-    
-           MnPrv	Minimum Privacy
-    
-           GdWo	Good Wood
-    
-           MnWw	Minimum Wood/Wire
-    
-           NA	No Fence
-    
-    	
-    
-    MiscFeature: Miscellaneous feature not covered in other categories
-    
-    		
-    
-           Elev	Elevator
-    
-           Gar2	2nd Garage (if not described in garage section)
-    
-           Othr	Other
-    
-           Shed	Shed (over 100 SF)
-    
-           TenC	Tennis Court
-    
-           NA	None
-    
-    		
-    
-    MiscVal: $Value of miscellaneous feature
-    
-    
-    
-    MoSold: Month Sold (MM)
-    
-    
-    
-    YrSold: Year Sold (YYYY)
-    
-    
-    
-    SaleType: Type of sale
-    
-    		
-    
-           WD 	Warranty Deed - Conventional
-    
-           CWD	Warranty Deed - Cash
-    
-           VWD	Warranty Deed - VA Loan
-    
-           New	Home just constructed and sold
-    
-           COD	Court Officer Deed/Estate
-    
-           Con	Contract 15% Down payment regular terms
-    
-           ConLw	Contract Low Down payment and low interest
-    
-           ConLI	Contract Low Interest
-    
-           ConLD	Contract Low Down
-    
-           Oth	Other
-    
-    		
-    
-    SaleCondition: Condition of sale
-    
-    
-    
-           Normal	Normal Sale
-    
-           Abnorml	Abnormal Sale -  trade, foreclosure, short sale
-    
-           AdjLand	Adjoining Land Purchase
-    
-           Alloca	Allocation - two linked properties with separate deeds, typically condo with a garage unit	
-    
-           Family	Sale between family members
-    
-           Partial	Home was not completed when last assessed (associated with New Homes)
-    
-
 
 # Data Cleaning and Visualization
 
@@ -1973,70 +926,70 @@ base_models
       <td>XGBRegressor</td>
       <td>{'objective': 'reg:squarederror', 'base_score'...</td>
       <td>0.14415</td>
-      <td>1.1037</td>
+      <td>1.27799</td>
     </tr>
     <tr>
       <th>4</th>
       <td>RandomForestRegressor</td>
       <td>{'bootstrap': True, 'ccp_alpha': 0.0, 'criteri...</td>
-      <td>0.145522</td>
-      <td>8.57641</td>
+      <td>0.145845</td>
+      <td>9.46269</td>
     </tr>
     <tr>
       <th>6</th>
       <td>ExtraTreesRegressor</td>
       <td>{'bootstrap': False, 'ccp_alpha': 0.0, 'criter...</td>
-      <td>0.148174</td>
-      <td>11.6939</td>
+      <td>0.148672</td>
+      <td>12.5669</td>
     </tr>
     <tr>
       <th>1</th>
       <td>Ridge</td>
       <td>{'alpha': 1.0, 'copy_X': True, 'fit_intercept'...</td>
       <td>0.15806</td>
-      <td>0.936156</td>
+      <td>1.10746</td>
     </tr>
     <tr>
       <th>5</th>
       <td>AdaBoostRegressor</td>
       <td>{'base_estimator': None, 'learning_rate': 1.0,...</td>
-      <td>0.172373</td>
-      <td>0.641572</td>
+      <td>0.172334</td>
+      <td>0.711068</td>
     </tr>
     <tr>
       <th>0</th>
       <td>LinearRegression</td>
       <td>{'copy_X': True, 'fit_intercept': True, 'n_job...</td>
       <td>0.195078</td>
-      <td>1.72942</td>
+      <td>1.95247</td>
     </tr>
     <tr>
       <th>8</th>
       <td>DecisionTreeRegressor</td>
       <td>{'ccp_alpha': 0.0, 'criterion': 'mse', 'max_de...</td>
-      <td>0.208065</td>
-      <td>0.149276</td>
+      <td>0.207736</td>
+      <td>0.167726</td>
     </tr>
     <tr>
       <th>7</th>
       <td>KNeighborsRegressor</td>
       <td>{'algorithm': 'auto', 'leaf_size': 30, 'metric...</td>
       <td>0.245247</td>
-      <td>0.115163</td>
+      <td>0.134309</td>
     </tr>
     <tr>
       <th>3</th>
       <td>Lasso</td>
       <td>{'alpha': 1.0, 'copy_X': True, 'fit_intercept'...</td>
       <td>0.395037</td>
-      <td>0.856787</td>
+      <td>1.04008</td>
     </tr>
     <tr>
       <th>2</th>
       <td>SGDRegressor</td>
       <td>{'alpha': 0.0001, 'average': False, 'early_sto...</td>
-      <td>4.06221e+14</td>
-      <td>0.909172</td>
+      <td>7.60419e+14</td>
+      <td>1.06799</td>
     </tr>
   </tbody>
 </table>
@@ -2062,7 +1015,7 @@ rfecv = rfecv.fit(X_train, y_train)
 print('Time Elapsed: {}'.format(time.time()-start))
 ```
 
-    Time Elapsed: 442.6255621910095
+    Time Elapsed: 457.01400446891785
 
 
 As we have done with other transformations, we fit the transformation algorithm on the training data and subsequently apply the transformation to both the training and testing set. 
@@ -2129,29 +1082,7 @@ grid_search.fit(X_train_rfecv, y_train)
 print('Time Elapsed: {}'.format(time.time()-start))
 ```
 
-
-
-
-    GridSearchCV(cv=ShuffleSplit(n_splits=5, random_state=0, test_size=0.3, train_size=None),
-                 estimator=XGBRegressor(base_score=None, booster=None,
-                                        colsample_bylevel=None,
-                                        colsample_bynode=None,
-                                        colsample_bytree=None, gamma=None,
-                                        gpu_id=None, importance_type='gain',
-                                        interaction_constraints=None,
-                                        learning_rate=None, max_delta_step=None,
-                                        max_depth=None, min_child_weight...
-                                        num_parallel_tree=None, random_state=None,
-                                        reg_alpha=None, reg_lambda=None,
-                                        scale_pos_weight=None, subsample=None,
-                                        tree_method=None, validate_parameters=None,
-                                        verbosity=None),
-                 param_grid=[{'booster': ['gbtree'], 'gamma': [0.01, 0.1, 0.5, 1.0],
-                              'max_depth': [3, 4, 5, 6, 7, 8, 9, 10],
-                              'n_estimators': [100, 200, 300, 400, 500],
-                              'objective': ['reg:squarederror']}],
-                 scoring='neg_mean_squared_error')
-
+    Time Elapsed: 261.41600584983826
 
 
 
@@ -2164,7 +1095,7 @@ cv_results_print(xgb_grid, X_train_rfecv, y_train)
     Model: XGBRegressor
     Model Parameters: {'objective': 'reg:squarederror', 'base_score': 0.5, 'booster': 'gbtree', 'colsample_bylevel': 1, 'colsample_bynode': 1, 'colsample_bytree': 1, 'gamma': 0.01, 'gpu_id': -1, 'importance_type': 'gain', 'interaction_constraints': '', 'learning_rate': 0.300000012, 'max_delta_step': 0, 'max_depth': 3, 'min_child_weight': 1, 'missing': nan, 'monotone_constraints': '()', 'n_estimators': 200, 'n_jobs': 0, 'num_parallel_tree': 1, 'random_state': 0, 'reg_alpha': 0, 'reg_lambda': 1, 'scale_pos_weight': 1, 'subsample': 1, 'tree_method': 'exact', 'validate_parameters': 1, 'verbosity': None}
     5 Fold CV RMSE: 0.1361
-    Computation Time: 0.31
+    Computation Time: 2.10
 
 
 ## Hyperparameter tuning with Hyperopt
@@ -2260,12 +1191,12 @@ hyperopt_trials, xgb_hyperopt = hyperopt(
     num_eval=30)
 ```
 
-    100%|██████████| 30/30 [02:18<00:00,  4.63s/trial, best loss: 0.11902818078587227]
+    100%|██████████| 30/30 [01:06<00:00,  2.23s/trial, best loss: 0.12048773117575351]
     
     ##### Results
-    Score best parameters:  0.11902818078587227
+    Score best parameters:  0.12048773117575351
     Best parameters:  {'alpha': 1, 'booster': 0, 'colsample_bytree': 1, 'learning_rate': 0.045439499742861544, 'max_depth': 3.0, 'n_estimators': 586.0, 'objective': 0, 'subsample': 0.9089066803820676}
-    Time elapsed:  139.196195602417
+    Time elapsed:  67.22251677513123
     Parameter combinations evaluated:  30
 
 
@@ -2277,7 +1208,7 @@ cv_results_print(xgb_hyperopt, X_train_rfecv, y_train)
     Model: XGBRegressor
     Model Parameters: {'objective': 'reg:squarederror', 'base_score': 0.5, 'booster': 'gbtree', 'colsample_bylevel': 1, 'colsample_bynode': 1, 'colsample_bytree': 1, 'gamma': 0, 'gpu_id': -1, 'importance_type': 'gain', 'interaction_constraints': '', 'learning_rate': 0.045439499742861544, 'max_delta_step': 0, 'max_depth': 3, 'min_child_weight': 1, 'missing': nan, 'monotone_constraints': '()', 'n_estimators': 586, 'n_jobs': 0, 'num_parallel_tree': 1, 'random_state': 0, 'reg_alpha': 1, 'reg_lambda': 1, 'scale_pos_weight': 1, 'subsample': 0.9089066803820676, 'tree_method': 'exact', 'validate_parameters': 1, 'verbosity': None, 'alpha': 1}
     5 Fold CV RMSE: 0.1292
-    Computation Time: 2.28
+    Computation Time: 1.38
 
 
 We can now see that the hyperopt algorithm has not only found a superior set of hyperparameters, but it has done so while saving us significant time compared to Grid Search!
@@ -2330,7 +1261,7 @@ cv_results_10_print(xgb_reg, X_train_rfecv, y_train)
     Model: XGBRegressor
     Model Parameters: {'objective': 'reg:squarederror', 'base_score': None, 'booster': None, 'colsample_bylevel': None, 'colsample_bynode': None, 'colsample_bytree': None, 'gamma': None, 'gpu_id': None, 'importance_type': 'gain', 'interaction_constraints': None, 'learning_rate': None, 'max_delta_step': None, 'max_depth': None, 'min_child_weight': None, 'missing': nan, 'monotone_constraints': None, 'n_estimators': 100, 'n_jobs': None, 'num_parallel_tree': None, 'random_state': None, 'reg_alpha': None, 'reg_lambda': None, 'scale_pos_weight': None, 'subsample': None, 'tree_method': None, 'validate_parameters': None, 'verbosity': None}
     10 Fold CV RMSE: 0.1417
-    Computation Time: 2.04
+    Computation Time: 2.54
 
 
 
@@ -2342,7 +1273,7 @@ cv_results_10_print(xgb_grid, X_train_rfecv, y_train)
     Model: XGBRegressor
     Model Parameters: {'objective': 'reg:squarederror', 'base_score': 0.5, 'booster': 'gbtree', 'colsample_bylevel': 1, 'colsample_bynode': 1, 'colsample_bytree': 1, 'gamma': 0.01, 'gpu_id': -1, 'importance_type': 'gain', 'interaction_constraints': '', 'learning_rate': 0.300000012, 'max_delta_step': 0, 'max_depth': 3, 'min_child_weight': 1, 'missing': nan, 'monotone_constraints': '()', 'n_estimators': 200, 'n_jobs': 0, 'num_parallel_tree': 1, 'random_state': 0, 'reg_alpha': 0, 'reg_lambda': 1, 'scale_pos_weight': 1, 'subsample': 1, 'tree_method': 'exact', 'validate_parameters': 1, 'verbosity': None}
     10 Fold CV RMSE: 0.1373
-    Computation Time: 1.95
+    Computation Time: 1.99
 
 
 
@@ -2354,7 +1285,7 @@ cv_results_10_print(xgb_hyperopt, X_train_rfecv, y_train)
     Model: XGBRegressor
     Model Parameters: {'objective': 'reg:squarederror', 'base_score': 0.5, 'booster': 'gbtree', 'colsample_bylevel': 1, 'colsample_bynode': 1, 'colsample_bytree': 1, 'gamma': 0, 'gpu_id': -1, 'importance_type': 'gain', 'interaction_constraints': '', 'learning_rate': 0.045439499742861544, 'max_delta_step': 0, 'max_depth': 3, 'min_child_weight': 1, 'missing': nan, 'monotone_constraints': '()', 'n_estimators': 586, 'n_jobs': 0, 'num_parallel_tree': 1, 'random_state': 0, 'reg_alpha': 1, 'reg_lambda': 1, 'scale_pos_weight': 1, 'subsample': 0.9089066803820676, 'tree_method': 'exact', 'validate_parameters': 1, 'verbosity': None, 'alpha': 1}
     10 Fold CV RMSE: 0.1304
-    Computation Time: 1.25
+    Computation Time: 1.31
 
 
 There you have it! We found that the hyperopt algorithm provided the best algorithm for our use case, although all three of the models (hyperopt, grid search, and base) had similar performances. 
