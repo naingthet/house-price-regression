@@ -1,3 +1,6 @@
+
+![png](figures/housesbanner.png)
+
 # Introduction
 In this project, we will tackle the Kaggle House Prices: Advanced Regression Techniques competition. The goal of this project is to develop a robust and powerful regression model to predict house sale prices given 79 features describing homes in Ames, Iowa. The objective is to achieve the highest validation accuracy possible, without peeking at the test data or allowing the test data to influence our methodology. 
 
