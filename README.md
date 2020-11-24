@@ -327,7 +327,7 @@ plt.show()
 ```
 
 
-![png](output_16_0.png)
+![png](figures/output_16_0.png)
 
 
 We can see that a few columns have very large proportions of their values missing. However, this may be misleading as some null values actually represent information. 
