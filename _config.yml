@@ -1,3 +1,4 @@
 theme: jekyll-theme-cayman
-title: [House Prices: Advanced Regression Techniques]
-description: [Predicting House Prices with XGBoost]
+title: House Prices - Advanced Regression Techniques
+description: Predicting House Prices with XGBoost
+author: Thet Naing
