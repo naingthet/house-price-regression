@@ -1,8 +1,7 @@
-
 ![png](figures/housesbanner.png)
 
 # Introduction
-In this project, we will tackle the Kaggle House Prices: Advanced Regression Techniques competition. The goal of this project is to develop a robust and powerful regression model to predict house sale prices given 79 features describing homes in Ames, Iowa. The objective is to achieve the highest validation accuracy possible, without peeking at the test data or allowing the test data to influence our methodology. 
+In this project, we will tackle the Kaggle House Prices: Advanced Regression Techniques competition. The goal of this project is to develop a robust and powerful regression model to predict house sale prices given 79 features describing homes in Ames, Iowa. The objective is to achieve the highest validation accuracy possible, without peeking at the test data or allowing the test data to influence our methodology.
 
 ## Framework
 1. Acquire the data
@@ -54,14 +53,14 @@ from xgboost import XGBRegressor
 
 # Model selection
 from sklearn import metrics
-from sklearn.model_selection import cross_validate, ShuffleSplit, cross_val_score, GridSearchCV 
+from sklearn.model_selection import cross_validate, ShuffleSplit, cross_val_score, GridSearchCV
 
 # Hyperparameter tuning and optimization
 from hyperopt import hp, fmin, tpe, Trials, STATUS_OK
 from hyperopt.pyll import scope
 ```
 
-## Graphing 
+## Graphing
 
 
 ```python
@@ -71,7 +70,7 @@ plt.style.use('fivethirtyeight')
 
 ## Shortcut Functions
 
-Throughout this project we will perform cross validation frequently to assess our models. These functions will help us to reproduce our cross validation techniques quickly and accurately. 
+Throughout this project we will perform cross validation frequently to assess our models. These functions will help us to reproduce our cross validation techniques quickly and accurately.
 
 
 ```python
@@ -90,7 +89,7 @@ def cv_results_print(model, X_train, y_train):
   cv = ShuffleSplit(n_splits=5, test_size=0.3, random_state=0)
   results = cross_val_score(model, X_train, y_train, cv=cv, n_jobs=-1, scoring='neg_mean_squared_error')
   rmse = np.sqrt(-results).mean()
-  
+
   model_name = model.__class__.__name__
   model_params = model.get_params()
   print('Model: {}'.format(model_name))
@@ -103,7 +102,7 @@ def cv_results_10_print(model, X_train, y_train):
   cv = ShuffleSplit(n_splits=10, test_size=0.3, random_state=0)
   results = cross_val_score(model, X_train, y_train, cv=cv, n_jobs=-1, scoring='neg_mean_squared_error')
   rmse = np.sqrt(-results).mean()
-  
+
   model_name = model.__class__.__name__
   model_params = model.get_params()
   print('Model: {}'.format(model_name))
@@ -114,7 +113,7 @@ def cv_results_10_print(model, X_train, y_train):
 
 ## Loading Data
 
-The data for this project is provided by Kaggle and available through the Kaggle API. To make this notebook easily reproducible, I have uploaded the data to this project's GitHub repository, from which we will download the data. 
+The data for this project is provided by Kaggle and available through the Kaggle API. To make this notebook easily reproducible, I have uploaded the data to this project's GitHub repository, from which we will download the data.
 
 
 ```python
@@ -138,184 +137,17 @@ By previewing the dataset it is clear that we have a very large number of column
 
 ```python
 print(train.shape, test.shape)
-train.head()
+print(train.head())
 ```
-
     (1460, 81) (1459, 80)
+       Id  MSSubClass MSZoning  ...  SaleType  SaleCondition SalePrice
+    0   1          60       RL  ...        WD         Normal    208500
+    1   2          20       RL  ...        WD         Normal    181500
+    2   3          60       RL  ...        WD         Normal    223500
+    3   4          70       RL  ...        WD        Abnorml    140000
+    4   5          60       RL  ...        WD         Normal    250000
 
-
-
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Id</th>
-      <th>MSSubClass</th>
-      <th>MSZoning</th>
-      <th>LotFrontage</th>
-      <th>LotArea</th>
-      <th>Street</th>
-      <th>Alley</th>
-      <th>LotShape</th>
-      <th>LandContour</th>
-      <th>Utilities</th>
-      <th>...</th>
-      <th>PoolArea</th>
-      <th>PoolQC</th>
-      <th>Fence</th>
-      <th>MiscFeature</th>
-      <th>MiscVal</th>
-      <th>MoSold</th>
-      <th>YrSold</th>
-      <th>SaleType</th>
-      <th>SaleCondition</th>
-      <th>SalePrice</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>1</td>
-      <td>60</td>
-      <td>RL</td>
-      <td>65.0</td>
-      <td>8450</td>
-      <td>Pave</td>
-      <td>NaN</td>
-      <td>Reg</td>
-      <td>Lvl</td>
-      <td>AllPub</td>
-      <td>...</td>
-      <td>0</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0</td>
-      <td>2</td>
-      <td>2008</td>
-      <td>WD</td>
-      <td>Normal</td>
-      <td>208500</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>2</td>
-      <td>20</td>
-      <td>RL</td>
-      <td>80.0</td>
-      <td>9600</td>
-      <td>Pave</td>
-      <td>NaN</td>
-      <td>Reg</td>
-      <td>Lvl</td>
-      <td>AllPub</td>
-      <td>...</td>
-      <td>0</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0</td>
-      <td>5</td>
-      <td>2007</td>
-      <td>WD</td>
-      <td>Normal</td>
-      <td>181500</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>3</td>
-      <td>60</td>
-      <td>RL</td>
-      <td>68.0</td>
-      <td>11250</td>
-      <td>Pave</td>
-      <td>NaN</td>
-      <td>IR1</td>
-      <td>Lvl</td>
-      <td>AllPub</td>
-      <td>...</td>
-      <td>0</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0</td>
-      <td>9</td>
-      <td>2008</td>
-      <td>WD</td>
-      <td>Normal</td>
-      <td>223500</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>4</td>
-      <td>70</td>
-      <td>RL</td>
-      <td>60.0</td>
-      <td>9550</td>
-      <td>Pave</td>
-      <td>NaN</td>
-      <td>IR1</td>
-      <td>Lvl</td>
-      <td>AllPub</td>
-      <td>...</td>
-      <td>0</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0</td>
-      <td>2</td>
-      <td>2006</td>
-      <td>WD</td>
-      <td>Abnorml</td>
-      <td>140000</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>5</td>
-      <td>60</td>
-      <td>RL</td>
-      <td>84.0</td>
-      <td>14260</td>
-      <td>Pave</td>
-      <td>NaN</td>
-      <td>IR1</td>
-      <td>Lvl</td>
-      <td>AllPub</td>
-      <td>...</td>
-      <td>0</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>0</td>
-      <td>12</td>
-      <td>2008</td>
-      <td>WD</td>
-      <td>Normal</td>
-      <td>250000</td>
-    </tr>
-  </tbody>
-</table>
-<p>5 rows × 81 columns</p>
-</div>
-
-
-
+    [5 rows x 81 columns]
 
 ```python
 # Finding the columns with the highest proportion of missing values
@@ -333,10 +165,10 @@ plt.show()
 ![png](figures/output_16_0.png)
 
 
-We can see that a few columns have very large proportions of their values missing. However, this may be misleading as some null values actually represent information. 
+We can see that a few columns have very large proportions of their values missing. However, this may be misleading as some null values actually represent information.
 
 ## Null Values Representing 0 or None
-According to the data description, some of our features have null values in place of 0 or "None". For example, a null value in the "Alley" column means that the particular home does not have alley access and does not mean the value is missing. Before moving forward, we will fill in these null values to avoid losing information. 
+According to the data description, some of our features have null values in place of 0 or "None". For example, a null value in the "Alley" column means that the particular home does not have alley access and does not mean the value is missing. Before moving forward, we will fill in these null values to avoid losing information.
 
 ### Null values representing "None"
 
@@ -356,10 +188,10 @@ train['Alley'].value_counts()
 
 
 ```python
-cols_none = ['Alley', 'BsmtCond', 
-            'BsmtExposure', 'BsmtFinType1', 
-            'BsmtFinType2', 'BsmtQual', 'FireplaceQu', 'GarageFinish', 
-            'GarageQual', 'GarageType', 'GarageCond', 'PoolQC', 
+cols_none = ['Alley', 'BsmtCond',
+            'BsmtExposure', 'BsmtFinType1',
+            'BsmtFinType2', 'BsmtQual', 'FireplaceQu', 'GarageFinish',
+            'GarageQual', 'GarageType', 'GarageCond', 'PoolQC',
             'Fence', 'MiscFeature', 'MasVnrType']
 
 for col in cols_none:
@@ -386,8 +218,8 @@ train['Alley'].value_counts()
 
 
 ```python
-cols_zero = ['GarageYrBlt', 'GarageArea', 
-            'GarageCars', 'BsmtFinSF1', 'BsmtUnfSF', 'BsmtFinSF2', 
+cols_zero = ['GarageYrBlt', 'GarageArea',
+            'GarageCars', 'BsmtFinSF1', 'BsmtUnfSF', 'BsmtFinSF2',
              'TotalBsmtSF', 'BsmtFullBath', 'BsmtHalfBath', 'MasVnrArea']
 
 for col in cols_zero:
@@ -396,7 +228,7 @@ for col in cols_zero:
 ```
 
 ## Adjusting data types
-We can see that the MSubClass variable is encoded numerically, but is actually categorical. Thus, we will transform this column into a categorical variable by changing the datatype to string. We will do this with a few columns that are actually categorical. 
+We can see that the MSubClass variable is encoded numerically, but is actually categorical. Thus, we will transform this column into a categorical variable by changing the datatype to string. We will do this with a few columns that are actually categorical.
 
 
 ```python
@@ -454,7 +286,7 @@ train['LotFrontage'] = train.groupby('Neighborhood').LotFrontage.transform(lambd
 test['LotFrontage'] = test.groupby('Neighborhood').LotFrontage.transform(lambda row: row.fillna(row.median()))
 ```
 
-We will check the missing values one last time. 
+We will check the missing values one last time.
 
 
 ```python
@@ -479,179 +311,17 @@ Let's preview our dataframe one last time before we move on.
 
 
 ```python
-train.head()
+print(train.head())
 ```
 
+       Id MSSubClass MSZoning  LotFrontage  ...  YrSold SaleType SaleCondition SalePrice
+    0   1         60       RL         65.0  ...    2008       WD        Normal    208500
+    1   2         20       RL         80.0  ...    2007       WD        Normal    181500
+    2   3         60       RL         68.0  ...    2008       WD        Normal    223500
+    3   4         70       RL         60.0  ...    2006       WD       Abnorml    140000
+    4   5         60       RL         84.0  ...    2008       WD        Normal    250000
 
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Id</th>
-      <th>MSSubClass</th>
-      <th>MSZoning</th>
-      <th>LotFrontage</th>
-      <th>LotArea</th>
-      <th>Street</th>
-      <th>Alley</th>
-      <th>LotShape</th>
-      <th>LandContour</th>
-      <th>Utilities</th>
-      <th>...</th>
-      <th>PoolArea</th>
-      <th>PoolQC</th>
-      <th>Fence</th>
-      <th>MiscFeature</th>
-      <th>MiscVal</th>
-      <th>MoSold</th>
-      <th>YrSold</th>
-      <th>SaleType</th>
-      <th>SaleCondition</th>
-      <th>SalePrice</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>1</td>
-      <td>60</td>
-      <td>RL</td>
-      <td>65.0</td>
-      <td>8450</td>
-      <td>Pave</td>
-      <td>None</td>
-      <td>Reg</td>
-      <td>Lvl</td>
-      <td>AllPub</td>
-      <td>...</td>
-      <td>0</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>0</td>
-      <td>2</td>
-      <td>2008</td>
-      <td>WD</td>
-      <td>Normal</td>
-      <td>208500</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>2</td>
-      <td>20</td>
-      <td>RL</td>
-      <td>80.0</td>
-      <td>9600</td>
-      <td>Pave</td>
-      <td>None</td>
-      <td>Reg</td>
-      <td>Lvl</td>
-      <td>AllPub</td>
-      <td>...</td>
-      <td>0</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>0</td>
-      <td>5</td>
-      <td>2007</td>
-      <td>WD</td>
-      <td>Normal</td>
-      <td>181500</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>3</td>
-      <td>60</td>
-      <td>RL</td>
-      <td>68.0</td>
-      <td>11250</td>
-      <td>Pave</td>
-      <td>None</td>
-      <td>IR1</td>
-      <td>Lvl</td>
-      <td>AllPub</td>
-      <td>...</td>
-      <td>0</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>0</td>
-      <td>9</td>
-      <td>2008</td>
-      <td>WD</td>
-      <td>Normal</td>
-      <td>223500</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>4</td>
-      <td>70</td>
-      <td>RL</td>
-      <td>60.0</td>
-      <td>9550</td>
-      <td>Pave</td>
-      <td>None</td>
-      <td>IR1</td>
-      <td>Lvl</td>
-      <td>AllPub</td>
-      <td>...</td>
-      <td>0</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>0</td>
-      <td>2</td>
-      <td>2006</td>
-      <td>WD</td>
-      <td>Abnorml</td>
-      <td>140000</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>5</td>
-      <td>60</td>
-      <td>RL</td>
-      <td>84.0</td>
-      <td>14260</td>
-      <td>Pave</td>
-      <td>None</td>
-      <td>IR1</td>
-      <td>Lvl</td>
-      <td>AllPub</td>
-      <td>...</td>
-      <td>0</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
-      <td>0</td>
-      <td>12</td>
-      <td>2008</td>
-      <td>WD</td>
-      <td>Normal</td>
-      <td>250000</td>
-    </tr>
-  </tbody>
-</table>
-<p>5 rows × 81 columns</p>
-</div>
-
+    [5 rows x 81 columns]
 
 
 ## Correlated Features
@@ -669,9 +339,9 @@ plt.show()
 ![png](figures/output_39_0.png)
 
 
-Here, the bottom row and the right column of the heatmap tell us how each of the features is correlated with the SalePrice output. We can see, for example, that LotArea is highly correlated with sale price, and this makes intuitive sense. However, as we move forward, we must consider that our features may have nonlinear relationships with the output variable (or one another), which this heatmap will not show. 
+Here, the bottom row and the right column of the heatmap tell us how each of the features is correlated with the SalePrice output. We can see, for example, that LotArea is highly correlated with sale price, and this makes intuitive sense. However, as we move forward, we must consider that our features may have nonlinear relationships with the output variable (or one another), which this heatmap will not show.
 
-Next, we can go one step further and map relationships that have a correlation above a certain value (in this case, we will use an absolute value of 0.7). This will make it easier for us to visualize the strong linear associations. 
+Next, we can go one step further and map relationships that have a correlation above a certain value (in this case, we will use an absolute value of 0.7). This will make it easier for us to visualize the strong linear associations.
 
 
 ```python
@@ -686,13 +356,13 @@ plt.show()
 ![png](figures/output_42_0.png)
 
 
-Interestingly, we can see that only 2 of the input variables have correlations of at least 0.7 with the output variable. We also see that there are a few input features that are highly correlated. 
+Interestingly, we can see that only 2 of the input variables have correlations of at least 0.7 with the output variable. We also see that there are a few input features that are highly correlated.
 
-At this point, we could remove one input feature from each pair of highly correlated input features. Doing so would avoid providing redundant data to our model. 
+At this point, we could remove one input feature from each pair of highly correlated input features. Doing so would avoid providing redundant data to our model.
 
-While in many cases it would be useful to drop redundant features, this technique presents a challenge. When dropping one redundant feature from a pair, we would have to manually select the feature to drop. Additionally, we would drop the feature based on linear summary statistics, which do not tell the full story. With this in mind, we will keep all of these variables in our data, especially since we will be working with models that have feature selection capabilities (i.e. ensemble methods and tree methods) or regularization (i.e. Lasso and Ridge Regression) built in. 
+While in many cases it would be useful to drop redundant features, this technique presents a challenge. When dropping one redundant feature from a pair, we would have to manually select the feature to drop. Additionally, we would drop the feature based on linear summary statistics, which do not tell the full story. With this in mind, we will keep all of these variables in our data, especially since we will be working with models that have feature selection capabilities (i.e. ensemble methods and tree methods) or regularization (i.e. Lasso and Ridge Regression) built in.
 
-First we will take a look at the distribution of the output variables, as it may be useful to transform this variable. 
+First we will take a look at the distribution of the output variables, as it may be useful to transform this variable.
 
 ## Separating X and Y Values
 
@@ -709,7 +379,7 @@ plt.show()
 ![png](figures/output_46_0.png)
 
 
-We can see that the sale price has a bit of right skew and the data does not form a normal distribution. With this in mind, we will log transform the sale price values. Conveniently, Kaggle's scoring for this competition also uses a log-transformed output variable, so this will help us to estimate our model prediction scores as well. 
+We can see that the sale price has a bit of right skew and the data does not form a normal distribution. With this in mind, we will log transform the sale price values. Conveniently, Kaggle's scoring for this competition also uses a log-transformed output variable, so this will help us to estimate our model prediction scores as well.
 
 
 ```python
@@ -741,14 +411,14 @@ plt.show()
 ![png](figures/output_49_0.png)
 
 
-As we can see, the output now resembles a normal distribution, which will help our models to predict outcomes. 
+As we can see, the output now resembles a normal distribution, which will help our models to predict outcomes.
 
 ## Preventing Data Leakage
-We have now split the training data into X and Y datasets, but there are still a couple of changes we can make to make our data more robust. 
+We have now split the training data into X and Y datasets, but there are still a couple of changes we can make to make our data more robust.
 
-First, we will drop the Id column because it does not provide any valuable information. 
+First, we will drop the Id column because it does not provide any valuable information.
 
-Next, we will drop the SaleType and SaleCondition columns to avoid data leakage. These variables were generated at the time of sale, meaning they provide information about the output variable that would not typically be available at the time of prediction. This is called data leakage. 
+Next, we will drop the SaleType and SaleCondition columns to avoid data leakage. These variables were generated at the time of sale, meaning they provide information about the output variable that would not typically be available at the time of prediction. This is called data leakage.
 
 It is important to consider the objective of this project. Our goal is to predict house prices based on the qualities of the house and neighborhood, not to guess the price of a house that has just been sold. While these variables would likely help us to achieve higher scores on the train set, the test set, and the Kaggle competition, we will exclude them because our goal is to build an accurate and robust model that can generalize to new, unseen test cases.
 
@@ -767,17 +437,17 @@ print(X_train.shape, y_train.shape, X_test.shape)
 
 ## Data Transformation Pipeline
 
-Now that we have finished our initial data cleaning, we must preprocess it for our models. We now face two challenges: 
+Now that we have finished our initial data cleaning, we must preprocess it for our models. We now face two challenges:
 
 
 1.   The numerical variables have very different ranges and scales
 2.   Categorical variables are encoded using strings
 
-We will address each of these challenges using Scikit-learn pipelines, which allow us to arrange a series of transformations into a Pipeline class, then apply the transformations to the data. 
+We will address each of these challenges using Scikit-learn pipelines, which allow us to arrange a series of transformations into a Pipeline class, then apply the transformations to the data.
 
-The added benefit of the Pipeline is that it will allow us to fit the transformations on the training set and to apply the transformations to the unseen test set. This will help us to avoid data leakage and develop models with greater potential for generalization. For example, when imputing missing values in the test set, we will use the median value of the corresponding column in the train set. 
+The added benefit of the Pipeline is that it will allow us to fit the transformations on the training set and to apply the transformations to the unseen test set. This will help us to avoid data leakage and develop models with greater potential for generalization. For example, when imputing missing values in the test set, we will use the median value of the corresponding column in the train set.
 
-Again, we do so because our ultimate goal is not simply to achieve the best test score, but to build a robust model that can generalize to new cases. 
+Again, we do so because our ultimate goal is not simply to achieve the best test score, but to build a robust model that can generalize to new cases.
 
 
 ```python
@@ -791,7 +461,7 @@ X_train_cat = X_train.drop(num_cols, axis=1)
 cat_cols = X_train_cat.columns.to_list()
 ```
 
-First, we will build our pipeline for numerical data. We will first impute any missing values with the median of the feature, then normalize the values. We will use RobustScaler here because it works well with outliers. StandardScaler, which normalizes all values from min to max, is very sensitive to outliers. 
+First, we will build our pipeline for numerical data. We will first impute any missing values with the median of the feature, then normalize the values. We will use RobustScaler here because it works well with outliers. StandardScaler, which normalizes all values from min to max, is very sensitive to outliers.
 
 
 ```python
@@ -839,7 +509,7 @@ full_pipeline_params = full_pipeline.get_params() # Storing the pipeline paramet
     X_test shape: (1459, 324)
 
 
-Our data processing is finished! We now have datasets with 301 features, due to one hot encoding. Fortunately, the data is stored in SciPy sparse matrices, which store the locations of nonzero values, which will save space and help us to minimize computation time. 
+Our data processing is finished! We now have datasets with 301 features, due to one hot encoding. Fortunately, the data is stored in SciPy sparse matrices, which store the locations of nonzero values, which will save space and help us to minimize computation time.
 
 # Selecting a Base Model
 Now that we have reduced the dimensionality of our dataset, we will train a set of base regression models using default parameters. The goal here is to select the most promising model and to focus on maximizing the predictive power of that singular model.
@@ -870,7 +540,7 @@ models = [
 ]
 
 # DataFrame to compile results
-model_columns = ['model_name', 'parameters', 'rmse', 'time']
+model_columns = ['model_name', 'rmse', 'time']
 base_models = pd.DataFrame(columns=model_columns)
 
 # Populate dataframe with results of each base model
@@ -881,7 +551,6 @@ for model in models:
   # Saving model name and paramters
   model_name = model.__class__.__name__
   base_models.loc[model_index, 'model_name'] = model_name
-  base_models.loc[model_index, 'parameters'] = str(model.get_params())
 
   # Cross validation score
   results = cv_results(model, X_train, y_train)
@@ -893,110 +562,21 @@ for model in models:
   model_index += 1
 
 base_models = base_models.sort_values(by='rmse', ascending=True)
-base_models
+print(base_models)
 ```
 
 
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>model_name</th>
-      <th>parameters</th>
-      <th>rmse</th>
-      <th>time</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>9</th>
-      <td>XGBRegressor</td>
-      <td>{'objective': 'reg:squarederror', 'base_score'...</td>
-      <td>0.14415</td>
-      <td>1.27799</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>RandomForestRegressor</td>
-      <td>{'bootstrap': True, 'ccp_alpha': 0.0, 'criteri...</td>
-      <td>0.145845</td>
-      <td>9.46269</td>
-    </tr>
-    <tr>
-      <th>6</th>
-      <td>ExtraTreesRegressor</td>
-      <td>{'bootstrap': False, 'ccp_alpha': 0.0, 'criter...</td>
-      <td>0.148672</td>
-      <td>12.5669</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>Ridge</td>
-      <td>{'alpha': 1.0, 'copy_X': True, 'fit_intercept'...</td>
-      <td>0.15806</td>
-      <td>1.10746</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>AdaBoostRegressor</td>
-      <td>{'base_estimator': None, 'learning_rate': 1.0,...</td>
-      <td>0.172334</td>
-      <td>0.711068</td>
-    </tr>
-    <tr>
-      <th>0</th>
-      <td>LinearRegression</td>
-      <td>{'copy_X': True, 'fit_intercept': True, 'n_job...</td>
-      <td>0.195078</td>
-      <td>1.95247</td>
-    </tr>
-    <tr>
-      <th>8</th>
-      <td>DecisionTreeRegressor</td>
-      <td>{'ccp_alpha': 0.0, 'criterion': 'mse', 'max_de...</td>
-      <td>0.207736</td>
-      <td>0.167726</td>
-    </tr>
-    <tr>
-      <th>7</th>
-      <td>KNeighborsRegressor</td>
-      <td>{'algorithm': 'auto', 'leaf_size': 30, 'metric...</td>
-      <td>0.245247</td>
-      <td>0.134309</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>Lasso</td>
-      <td>{'alpha': 1.0, 'copy_X': True, 'fit_intercept'...</td>
-      <td>0.395037</td>
-      <td>1.04008</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>SGDRegressor</td>
-      <td>{'alpha': 0.0001, 'average': False, 'early_sto...</td>
-      <td>7.60419e+14</td>
-      <td>1.06799</td>
-    </tr>
-  </tbody>
-</table>
-</div>
+                  model_name          rmse       time
+    9           XGBRegressor  1.441500e-01   1.277990
+    4  RandomForestRegressor  1.458450e-01   9.462690
+    6    ExtraTreesRegressor  1.486720e-01  12.566900
+    1                  Ridge  1.580600e-01   1.107460
+    5      AdaBoostRegressor  1.723340e-01   0.711068
+    0       LinearRegression  1.950780e-01   1.952470
+    8  DecisionTreeRegressor  2.077360e-01   0.167726
+    7    KNeighborsRegressor  2.452470e-01   0.134309
+    3                  Lasso  3.950370e-01   1.040080
+    2           SGDRegressor  7.604190e+14   1.067990
 
 
 
@@ -1004,9 +584,9 @@ We see that the XGBoost regressor had the lowest RMSE of all the base models we 
 
 # Feature Selection with RFECV
 
-Now that we have selected our model, we will tune it to maximize its predictive power (i.e. minimize RMSE). At this point, our datasets contain 301 features, many of which may not contain useful information. As XGBoost has a built in feature importance metric, we can use recursive feature elimination (RFE) alongside cross validation. This functionality is conveniently provided by sklearn. 
+Now that we have selected our model, we will tune it to maximize its predictive power (i.e. minimize RMSE). At this point, our datasets contain 301 features, many of which may not contain useful information. As XGBoost has a built in feature importance metric, we can use recursive feature elimination (RFE) alongside cross validation. This functionality is conveniently provided by sklearn.
 
-RFE works by first tuning the model (in this case, XGBoost) on all of the features in the dataset. The model's feature importance metric will then be assessed to identify the least important feature. This feature is removed from the feature set and the model is retuned on the entire feature set minus the dropped feature. RFECV with Scikit-learn will apply this for us using cross validation to find the optimal feature set that will maximize our performance based on the objective function (in this case, minimize RMSE). 
+RFE works by first tuning the model (in this case, XGBoost) on all of the features in the dataset. The model's feature importance metric will then be assessed to identify the least important feature. This feature is removed from the feature set and the model is retuned on the entire feature set minus the dropped feature. RFECV with Scikit-learn will apply this for us using cross validation to find the optimal feature set that will maximize our performance based on the objective function (in this case, minimize RMSE).
 
 
 ```python
@@ -1021,7 +601,7 @@ print('Time Elapsed: {}'.format(time.time()-start))
     Time Elapsed: 457.01400446891785
 
 
-As we have done with other transformations, we fit the transformation algorithm on the training data and subsequently apply the transformation to both the training and testing set. 
+As we have done with other transformations, we fit the transformation algorithm on the training data and subsequently apply the transformation to both the training and testing set.
 
 
 ```python
@@ -1050,10 +630,10 @@ print('5-fold CV RMSE of XGBoost after RFECV: {:.4f}'.format(cv_results(xgb_reg,
 
 
 # Hyperparameter Tuning
-We have now selected our base model and used RFECV to select the optimal feature set. Thus far, our optimizations have focused on transforming the datasets to maximize predictive power, but we have yet to adjust the hyperparameters of the XGBoost model itself. In this next step, we will use Grid Search and Hyperopt with cross validation to identify the optimal hyperparameters for our XGBRegressor. 
+We have now selected our base model and used RFECV to select the optimal feature set. Thus far, our optimizations have focused on transforming the datasets to maximize predictive power, but we have yet to adjust the hyperparameters of the XGBoost model itself. In this next step, we will use Grid Search and Hyperopt with cross validation to identify the optimal hyperparameters for our XGBRegressor.
 
 ## Grid Search CV
-Grid search is a hyperparameter tuning algorithm that, provided a dictionary of possible hyperparameter values, exhaustively trains the predictive model on each and every hyperparameter combination. Grid Search is incredibly useful because it can identify an optimal set of hyperparameters as long as the optimal values are contained in the grid. However, as Grid Search trains and cross validates the selected model on every single combination, it has very high computational complexity and will often result in long search times. 
+Grid search is a hyperparameter tuning algorithm that, provided a dictionary of possible hyperparameter values, exhaustively trains the predictive model on each and every hyperparameter combination. Grid Search is incredibly useful because it can identify an optimal set of hyperparameters as long as the optimal values are contained in the grid. However, as Grid Search trains and cross validates the selected model on every single combination, it has very high computational complexity and will often result in long search times.
 
 As Grid Search can take a very long time to run, we must do our best to minimize the combinations of hyperparameters provided to the algorithm.
 
@@ -1073,7 +653,7 @@ param_grid = [
 # Implement grid search using cross validation
 cv_split = ShuffleSplit(n_splits=5, test_size=0.3, random_state=0)
 grid_search = GridSearchCV(estimator=XGBRegressor(), param_grid=param_grid,
-                           scoring = 'neg_mean_squared_error', 
+                           scoring = 'neg_mean_squared_error',
                            cv = cv_split)
 ```
 
@@ -1103,14 +683,14 @@ cv_results_print(xgb_grid, X_train_rfecv, y_train)
 
 ## Hyperparameter tuning with Hyperopt
 
-Grid Search is a very simple algorithm that fits our model using every combination of input parameters. However, the algorithm does not infer any details from each combination. Hyperopt seeks to combat this issue that persists Grid Search and other "greedy" search algorithms. 
+Grid Search is a very simple algorithm that fits our model using every combination of input parameters. However, the algorithm does not infer any details from each combination. Hyperopt seeks to combat this issue that persists Grid Search and other "greedy" search algorithms.
 
-Hyperopt is a Python library for the optimization of model hyperparameters that leverages Bayesian concepts of prior probability. Rather than exhaustively or randomly searching a parameter space, hyperopt takes advantage of probability distributions to quickly converge on an optimal set of hyperparameter values. 
+Hyperopt is a Python library for the optimization of model hyperparameters that leverages Bayesian concepts of prior probability. Rather than exhaustively or randomly searching a parameter space, hyperopt takes advantage of probability distributions to quickly converge on an optimal set of hyperparameter values.
 
-We will implement hyperopt using the Tree of Parzen Estimators (TPE) algorithm, which uses prior probabilities to approximate expected improvement in model performance. TPE uses expected improvement, rather than actual model score or accuracy, to converge on optimal hyperparameters, which saves substantial time. 
+We will implement hyperopt using the Tree of Parzen Estimators (TPE) algorithm, which uses prior probabilities to approximate expected improvement in model performance. TPE uses expected improvement, rather than actual model score or accuracy, to converge on optimal hyperparameters, which saves substantial time.
 
 ### Parameter space
-First we must define a parameter space for hyperopt using probability distributions. Note that we can also ask hyperopt to simply select from a list of possible hyperparameters, as we are doing with a few variables here. 
+First we must define a parameter space for hyperopt using probability distributions. Note that we can also ask hyperopt to simply select from a list of possible hyperparameters, as we are doing with a few variables here.
 
 
 ```python
@@ -1118,23 +698,23 @@ param_hyperopt = {
     'n_estimators' : scope.int(hp.quniform('n_estimators', 100, 1000, 1)),
     'max_depth': scope.int(hp.quniform('max_depth', 2, 20, 1)),
     'learning_rate': hp.loguniform('learning_rate', np.log(0.01), np.log(1)),
-    'subsample': hp.uniform('subsample', 0.8, 1.0), 
+    'subsample': hp.uniform('subsample', 0.8, 1.0),
     'colsample_bytree' : hp.choice('colsample_bytree', np.arange(0.3, 0.8, 0.1)),
-    'alpha' : hp.choice('alpha', np.arange(0.0, 1.1, 0.1)), 
+    'alpha' : hp.choice('alpha', np.arange(0.0, 1.1, 0.1)),
     'objective':  hp.choice('objective', ['reg:squarederror']),
     'booster': hp.choice('booster', ['gbtree'])
 }
 ```
 
-Next, we will define a function that will time, implement, and record the hyperopt TPE algorithm on our dataset and provide the best performing hyperparameter set. 
+Next, we will define a function that will time, implement, and record the hyperopt TPE algorithm on our dataset and provide the best performing hyperparameter set.
 
 
 ```python
 def hyperopt(param_space, X_train_data, y_train_data, num_eval):
-    
+
     # Timing
     start = time.time()
-    
+
     # Creating an objective function that will output rmse loss given a set of model parameters
     # Hyperopt will seek to minimize the loss returned by this function
     def objective_function(params):
@@ -1147,16 +727,16 @@ def hyperopt(param_space, X_train_data, y_train_data, num_eval):
 
     # The fmin function will carry out the hyperopt optimization for us
     # Using TPE and given the objective function, the algorithm will find the hyperparameters that minimize loss as defined by our objective function
-    best_param = fmin(objective_function, 
-                      param_space, 
-                      algo=tpe.suggest, 
-                      max_evals=num_eval, 
+    best_param = fmin(objective_function,
+                      param_space,
+                      algo=tpe.suggest,
+                      max_evals=num_eval,
                       trials=trials,
                       rstate= np.random.RandomState(0))
-    
+
     # Loss for each trial
     loss = [x['result']['loss'] for x in trials.trials]
-    
+
     # Extract our best parameter values into a list
     best_param_values = [x for x in best_param.values()]
 
@@ -1171,16 +751,16 @@ def hyperopt(param_space, X_train_data, y_train_data, num_eval):
         objective = 'reg:squarederror',
         subsample = best_param_values[7]
                           )
-                     
+
     clf_best.fit(X_train_data, y_train_data)
-    
+
     print("")
     print("##### Results")
     print("Score best parameters: ", min(loss))
     print("Best parameters: ", best_param)
     print("Time elapsed: ", time.time() - start)
     print("Parameter combinations evaluated: ", num_eval)
-    
+
     return trials, clf_best
 ```
 
@@ -1188,14 +768,14 @@ def hyperopt(param_space, X_train_data, y_train_data, num_eval):
 ```python
 # Running the optimization function and storing the model and trial log
 hyperopt_trials, xgb_hyperopt = hyperopt(
-    param_space=param_hyperopt, 
-    X_train_data=X_train_rfecv, 
-    y_train_data=y_train, 
+    param_space=param_hyperopt,
+    X_train_data=X_train_rfecv,
+    y_train_data=y_train,
     num_eval=30)
 ```
 
     100%|██████████| 30/30 [01:06<00:00,  2.23s/trial, best loss: 0.12048773117575351]
-    
+
     ##### Results
     Score best parameters:  0.12048773117575351
     Best parameters:  {'alpha': 1, 'booster': 0, 'colsample_bytree': 1, 'learning_rate': 0.045439499742861544, 'max_depth': 3.0, 'n_estimators': 586.0, 'objective': 0, 'subsample': 0.9089066803820676}
@@ -1250,10 +830,10 @@ plt.show()
 
 Interestingly, this graph shows us that the best error reduces in large steps, rather than with each iteration. This is because of how hyperopt works--rather than minimizing the objective function at every iteration (i.e. fitting the model and determining the error), hyperopt will use expected improvement to drive iterations. This is also the same reason why the minimum error presented by hyperopt was different from our actual CV result.
 
-Most notably, the hyperopt algorithm is able to converge with very few trials, especially considering that it was given a wide parameter space. It is for this reason that, even if hyperopt does not perform better than grid search, it may be the optimal choice, as it is able to converge faster and provides a strong result. 
+Most notably, the hyperopt algorithm is able to converge with very few trials, especially considering that it was given a wide parameter space. It is for this reason that, even if hyperopt does not perform better than grid search, it may be the optimal choice, as it is able to converge faster and provides a strong result.
 
 # Comparing the Models
-In this last step, we will compare the Grid Search and Hyperopt optimizations using 10 fold cross validation. This is to help us be more confident that one method is superior to the other for our use case. We will also consider the base model for reference. 
+In this last step, we will compare the Grid Search and Hyperopt optimizations using 10 fold cross validation. This is to help us be more confident that one method is superior to the other for our use case. We will also consider the base model for reference.
 
 
 ```python
@@ -1291,12 +871,12 @@ cv_results_10_print(xgb_hyperopt, X_train_rfecv, y_train)
     Computation Time: 1.31
 
 
-There you have it! We found that the hyperopt algorithm provided the best algorithm for our use case, although all three of the models (hyperopt, grid search, and base) had similar performances. 
+There you have it! We found that the hyperopt algorithm provided the best algorithm for our use case, although all three of the models (hyperopt, grid search, and base) had similar performances.
 
 # Conclusion
-Considering that the XGBoost model showed little improvement despite extensive efforts to optimize the model, it may be worthwhile to consider other models, as they may be able to achieve superior results once optimized. Despite this, we were able to develop a model with high predictive power. 
+Considering that the XGBoost model showed little improvement despite extensive efforts to optimize the model, it may be worthwhile to consider other models, as they may be able to achieve superior results once optimized. Despite this, we were able to develop a model with high predictive power.
 
-In this project, we cleaned and preprocessed our data, selected a base model (XGBoost), selected features using RFECV, and optimized the model using hyperopt's TPE algorithm. At each step of the way, we were able to enhance the predictive power of our model, all the while avoiding data leakage in hopes of developing a model that would not only perform well on the Kaggle competition, but also perform well when generalizing to new data. 
+In this project, we cleaned and preprocessed our data, selected a base model (XGBoost), selected features using RFECV, and optimized the model using hyperopt's TPE algorithm. At each step of the way, we were able to enhance the predictive power of our model, all the while avoiding data leakage in hopes of developing a model that would not only perform well on the Kaggle competition, but also perform well when generalizing to new data.
 
 ## Exporting Results
 
@@ -1323,94 +903,13 @@ results = pd.DataFrame(data={'Id':test['Id'], 'SalePrice': y_pred})
 results
 ```
 
-
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Id</th>
-      <th>SalePrice</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>1461</td>
-      <td>124487.765625</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>1462</td>
-      <td>158638.406250</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>1463</td>
-      <td>178700.734375</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>1464</td>
-      <td>191255.046875</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>1465</td>
-      <td>186095.890625</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>1454</th>
-      <td>2915</td>
-      <td>78624.429688</td>
-    </tr>
-    <tr>
-      <th>1455</th>
-      <td>2916</td>
-      <td>88798.343750</td>
-    </tr>
-    <tr>
-      <th>1456</th>
-      <td>2917</td>
-      <td>184126.640625</td>
-    </tr>
-    <tr>
-      <th>1457</th>
-      <td>2918</td>
-      <td>114805.007812</td>
-    </tr>
-    <tr>
-      <th>1458</th>
-      <td>2919</td>
-      <td>229285.734375</td>
-    </tr>
-  </tbody>
-</table>
-<p>1459 rows × 2 columns</p>
-</div>
-
-
-
+         Id      SalePrice
+    0  1461  124487.765625
+    1  1462  158638.406250
+    2  1463  178700.734375
+    3  1464  191255.046875
+    4  1465  186095.890625
+    1459 rows × 2 columns
 
 ```python
 results.to_csv('house_price_sub.csv', header=True, index=False)
